@@ -17,6 +17,8 @@ public class BunnyControl : MonoBehaviour {
     public LayerMask WhatIsGround;
     public float JumpForce = 700;
 
+    bool DoubleJump = false;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -30,6 +32,9 @@ public class BunnyControl : MonoBehaviour {
 
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, WhatIsGround);
         anim.SetBool("Ground", grounded);
+
+        if (grounded)
+            DoubleJump = false;
 
         anim.SetFloat("vSpeed", rigidbody2D.velocity.y);
 
@@ -50,10 +55,13 @@ public class BunnyControl : MonoBehaviour {
 
     void Update()
     {
-        if(grounded && Input.GetKeyDown(KeyCode.Space))
+        if((grounded || !DoubleJump) && Input.GetKeyDown(KeyCode.Space))
         {
             anim.SetBool("Ground", false);
             rigidbody2D.AddForce(new Vector2(0, JumpForce));
+
+            if (!DoubleJump && !grounded)
+                DoubleJump = true;
         }
     }
 
