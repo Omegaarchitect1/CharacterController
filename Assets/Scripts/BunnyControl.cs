@@ -11,6 +11,11 @@ public class BunnyControl : MonoBehaviour {
 
     Animator anim;
 
+    bool grounded = false;
+    public Transform groundCheck;
+    float groundRadius = 0.2f;
+    public LayerMask WhatIsGround;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -21,6 +26,13 @@ public class BunnyControl : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, WhatIsGround);
+        anim.SetBool("Ground", grounded);
+
+
+
+
         float move = Input.GetAxis("Horizontal");
 
         anim.SetFloat("Speed", Mathf.Abs(move));
